@@ -1,0 +1,21 @@
+# Maven
+backend/target/
+**/target/
+
+# Node
+frontend/node_modules/
+**/node_modules/
+frontend/dist/
+
+# IDE
+.idea/
+*.iml
+.classpath
+.project
+.DS_Store
+
+# Logs
+*.log
+
+# Misc
+Thumbs.db

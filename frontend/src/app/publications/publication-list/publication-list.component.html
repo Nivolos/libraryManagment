@@ -1,0 +1,30 @@
+<table class="publication-table">
+  <thead>
+  <tr>
+    <th>Titel</th>
+    <th>Autor(en)</th>
+    <th>Typ</th>
+    <th>Bestand</th>
+    <th>Schlagwörter</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let publication of publications; trackBy: trackById"
+      (click)="onSelect(publication)"
+      [class.selected]="publication.id === selectedPublicationId">
+    <td>{{ publication.title }}</td>
+    <td>{{ publication.authors }}</td>
+    <td>{{ publication.type?.name || '—' }}</td>
+    <td>{{ publication.stock }}</td>
+    <td>
+      <span class="keyword" *ngFor="let keyword of publication.keywords">{{ keyword.name }}</span>
+    </td>
+    <td class="actions">
+      <button type="button" (click)="onDelete(publication, $event)">Löschen</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!publications.length" class="empty">Keine Publikationen gefunden.</p>

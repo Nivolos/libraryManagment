@@ -1,0 +1,53 @@
+<section class="filter">
+  <h2>Publikationen</h2>
+  <form (ngSubmit)="reloadPublications()" #filterForm="ngForm">
+    <div class="filter-row">
+      <label for="query">Suche</label>
+      <input id="query" name="query" type="text" [(ngModel)]="filter.query" placeholder="Titel, Autor, Verlag" />
+    </div>
+    <div class="filter-row">
+      <label for="type">Publikationsart</label>
+      <select id="type" name="type" [(ngModel)]="filter.typeId">
+        <option [ngValue]="undefined">Alle</option>
+        <option *ngFor="let type of typeOptions" [ngValue]="type.id">{{ type.name }}</option>
+      </select>
+    </div>
+    <div class="filter-row keywords">
+      <span>Schlagwörter</span>
+      <div class="keyword" *ngFor="let keyword of keywordOptions">
+        <input type="checkbox"
+               [id]="'keyword-' + keyword.id"
+               [checked]="filter.keywordIds?.includes(keyword.id!)"
+               (change)="updateFilterKeywords(keyword.id!, $event.target.checked)" />
+        <label [for]="'keyword-' + keyword.id">{{ keyword.name }}</label>
+      </div>
+    </div>
+    <div class="filter-actions">
+      <button type="submit">Aktualisieren</button>
+      <button type="button" (click)="createPublication()">Neu</button>
+    </div>
+  </form>
+  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+</section>
+
+<section class="content">
+  <app-publication-list
+    [publications]="publications"
+    [selectedPublicationId]="selectedPublication?.id ?? null"
+    (selectPublication)="editPublication($event)"
+    (deletePublication)="deletePublication($event)">
+  </app-publication-list>
+
+  <app-publication-form
+    *ngIf="selectedPublication"
+    [publication]="selectedPublication"
+    [types]="typeOptions"
+    [keywords]="keywordOptions"
+    (save)="savePublication($event)"
+    (cancel)="cancelEditing()">
+  </app-publication-form>
+
+  <div class="placeholder" *ngIf="!selectedPublication">
+    <p>Wählen Sie eine Publikation aus oder legen Sie eine neue an.</p>
+  </div>
+</section>
