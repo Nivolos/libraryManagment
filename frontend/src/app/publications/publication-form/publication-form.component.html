@@ -1,0 +1,53 @@
+<form (ngSubmit)="onSubmit()" #publicationForm="ngForm">
+  <h3>{{ publication.id ? 'Publikation bearbeiten' : 'Neue Publikation' }}</h3>
+
+  <div class="form-row">
+    <label for="title">Titel *</label>
+    <input id="title" name="title" type="text" required [(ngModel)]="publication.title" />
+  </div>
+
+  <div class="form-row">
+    <label for="authors">Autor(en) *</label>
+    <input id="authors" name="authors" type="text" required [(ngModel)]="publication.authors" />
+  </div>
+
+  <div class="form-row">
+    <label for="publishedAt">Veröffentlichung</label>
+    <input id="publishedAt" name="publishedAt" type="date" [(ngModel)]="publication.publishedAt" />
+  </div>
+
+  <div class="form-row">
+    <label for="publisher">Verlag</label>
+    <input id="publisher" name="publisher" type="text" [(ngModel)]="publication.publisher" />
+  </div>
+
+  <div class="form-row">
+    <label for="isbn">ISBN</label>
+    <input id="isbn" name="isbn" type="text" [(ngModel)]="publication.isbn" />
+  </div>
+
+  <div class="form-row">
+    <label for="stock">Exemplare *</label>
+    <input id="stock" name="stock" type="number" min="0" required [(ngModel)]="publication.stock" />
+  </div>
+
+  <div class="form-row">
+    <label for="typeId">Publikationsart</label>
+    <select id="typeId" name="typeId" [(ngModel)]="selectedTypeId">
+      <option [ngValue]="undefined">Keine</option>
+      <option *ngFor="let type of types" [ngValue]="type.id">{{ type.name }}</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="keywordIds">Schlagwörter</label>
+    <select id="keywordIds" name="keywordIds" multiple size="5" [(ngModel)]="selectedKeywordIds">
+      <option *ngFor="let keyword of keywords" [ngValue]="keyword.id">{{ keyword.name }}</option>
+    </select>
+  </div>
+
+  <div class="actions">
+    <button type="submit" [disabled]="publicationForm.invalid">Speichern</button>
+    <button type="button" (click)="onCancel()">Abbrechen</button>
+  </div>
+</form>

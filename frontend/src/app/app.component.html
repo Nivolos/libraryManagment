@@ -1,0 +1,13 @@
+<div class="app-shell">
+  <header class="app-header">
+    <h1>Bibliotheksverwaltung</h1>
+    <nav class="app-nav">
+      <a routerLink="/publications" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Publikationen</a>
+      <a routerLink="/loans" routerLinkActive="active">Ausleihen</a>
+      <a routerLink="/masters" routerLinkActive="active">Stammdaten</a>
+    </nav>
+  </header>
+  <main class="app-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

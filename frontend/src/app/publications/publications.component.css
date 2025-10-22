@@ -1,0 +1,54 @@
+:host {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.5rem;
+}
+
+.filter {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.filter-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-actions button {
+  cursor: pointer;
+}
+
+.keywords {
+  display: flex;
+  flex-direction: column;
+}
+
+.keyword {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.placeholder {
+  align-self: center;
+  color: #666;
+  font-style: italic;
+}
+
+.error {
+  color: #b00020;
+  font-size: 0.9rem;
+}
