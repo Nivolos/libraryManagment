@@ -1,0 +1,48 @@
+<section class="loan-actions">
+  <h2>Ausleihe erfassen</h2>
+  <div class="form-row">
+    <label for="loanPublication">Publikation *</label>
+    <select id="loanPublication" [(ngModel)]="borrowForm.publicationId" name="loanPublication">
+      <option [ngValue]="undefined">Bitte auswählen</option>
+      <option *ngFor="let publication of publications" [ngValue]="publication.id">{{ publication.title }}</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="loanBorrower">Ausleiher *</label>
+    <select id="loanBorrower" [(ngModel)]="borrowForm.borrowerId" name="loanBorrower">
+      <option [ngValue]="undefined">Bitte auswählen</option>
+      <option *ngFor="let borrower of borrowers" [ngValue]="borrower.id">
+        {{ borrower.lastName }}, {{ borrower.firstName }} ({{ borrower.matriculation }})
+      </option>
+    </select>
+  </div>
+  <button type="button" (click)="borrow()" [disabled]="!borrowForm.publicationId || !borrowForm.borrowerId">Ausleihen</button>
+</section>
+
+<section class="loan-list">
+  <h2>Offene Ausleihen</h2>
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  <table *ngIf="openLoans.length; else emptyState">
+    <thead>
+    <tr>
+      <th>Publikation</th>
+      <th>Ausleiher</th>
+      <th>Ausgegeben</th>
+      <th>Fällig</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let loan of openLoans">
+      <td>{{ loan.publication.title }}</td>
+      <td>{{ loan.borrower.lastName }}, {{ loan.borrower.firstName }}</td>
+      <td>{{ loan.issuedAt }}</td>
+      <td>{{ loan.dueAt }}</td>
+      <td><button type="button" (click)="returnLoan(loan)">Zurücknehmen</button></td>
+    </tr>
+    </tbody>
+  </table>
+  <ng-template #emptyState>
+    <p>Keine offenen Ausleihen vorhanden.</p>
+  </ng-template>
+</section>

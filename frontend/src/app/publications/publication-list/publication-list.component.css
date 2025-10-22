@@ -1,0 +1,41 @@
+.publication-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.publication-table th,
+.publication-table td {
+  border-bottom: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.publication-table tr:hover {
+  background-color: #f0f6ff;
+  cursor: pointer;
+}
+
+.publication-table tr.selected {
+  background-color: #d9eaff;
+}
+
+.keyword {
+  background-color: #eee;
+  border-radius: 12px;
+  padding: 0.1rem 0.5rem;
+  margin-right: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.actions {
+  text-align: right;
+}
+
+.actions button {
+  cursor: pointer;
+}
+
+.empty {
+  margin-top: 1rem;
+  color: #666;
+}
