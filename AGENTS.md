@@ -1,8 +1,6 @@
 # AGENTS.md — Restructure & Bootstrap für **libraryManagment** (Angular + Spring Boot + Hibernate)
 
 **Repo:** [github.com/Nivolos/libraryManagment](https://github.com/Nivolos/libraryManagment)  
-**Arbeitsbranch:** `Nivolos-gulpV1` (alle PRs gegen diesen Branch erstellen)
->*Branch:* [github.com/Nivolos/libraryManagment/Nivolos-gulpV1](https://github.com/Nivolos/libraryManagment/Nivolos-gulpV1)
 
 ## 📄 Referenz
 
@@ -231,5 +229,6 @@ set -euo pipefail
     `npm ci`  
     `npm start`  
 )
+
 
 `{ "/api": { "target": "http://localhost:8080", "secure": false, "changeOrigin": true } }`
