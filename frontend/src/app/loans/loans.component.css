@@ -1,0 +1,43 @@
+:host {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.5rem;
+}
+
+.loan-actions,
+.loan-list {
+  background-color: #f8f9fb;
+  border: 1px solid #d7dbe2;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
+}
+
+.form-row select {
+  padding: 0.4rem;
+}
+
+.loan-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.loan-list th,
+.loan-list td {
+  border-bottom: 1px solid #dde3ec;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.error {
+  color: #b00020;
+}
+
+button {
+  cursor: pointer;
+}

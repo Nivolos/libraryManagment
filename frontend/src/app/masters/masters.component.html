@@ -1,0 +1,102 @@
+<section class="masters">
+  <h2>Stammdaten</h2>
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <div class="masters-grid">
+    <div class="card">
+      <h3>Ausleiher</h3>
+      <form (ngSubmit)="saveBorrower()">
+        <input type="hidden" name="id" [(ngModel)]="borrowerDraft.id" />
+        <label>
+          Matrikel *
+          <input name="matriculation" required [(ngModel)]="borrowerDraft.matriculation" />
+        </label>
+        <label>
+          Vorname *
+          <input name="firstName" required [(ngModel)]="borrowerDraft.firstName" />
+        </label>
+        <label>
+          Nachname *
+          <input name="lastName" required [(ngModel)]="borrowerDraft.lastName" />
+        </label>
+        <label>
+          E-Mail *
+          <input name="email" type="email" required [(ngModel)]="borrowerDraft.email" />
+        </label>
+        <div class="actions">
+          <button type="submit">Speichern</button>
+          <button type="button" (click)="borrowerDraft = {matriculation: '', firstName: '', lastName: '', email: ''}">Neu</button>
+        </div>
+      </form>
+      <table>
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Matrikel</th>
+          <th>E-Mail</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let borrower of borrowers">
+          <td>{{ borrower.lastName }}, {{ borrower.firstName }}</td>
+          <td>{{ borrower.matriculation }}</td>
+          <td>{{ borrower.email }}</td>
+          <td>
+            <button type="button" (click)="editBorrower(borrower)">Bearbeiten</button>
+            <button type="button" (click)="deleteBorrower(borrower)">Löschen</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Schlagwörter</h3>
+      <form (ngSubmit)="saveKeyword()">
+        <input type="hidden" name="id" [(ngModel)]="keywordDraft.id" />
+        <label>
+          Bezeichnung *
+          <input name="name" required [(ngModel)]="keywordDraft.name" />
+        </label>
+        <div class="actions">
+          <button type="submit">Speichern</button>
+          <button type="button" (click)="keywordDraft = {name: ''}">Neu</button>
+        </div>
+      </form>
+      <ul>
+        <li *ngFor="let keyword of keywords">
+          {{ keyword.name }}
+          <span>
+            <button type="button" (click)="editKeyword(keyword)">Bearbeiten</button>
+            <button type="button" (click)="deleteKeyword(keyword)">Löschen</button>
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Publikationsarten</h3>
+      <form (ngSubmit)="saveType()">
+        <input type="hidden" name="id" [(ngModel)]="typeDraft.id" />
+        <label>
+          Bezeichnung *
+          <input name="name" required [(ngModel)]="typeDraft.name" />
+        </label>
+        <div class="actions">
+          <button type="submit">Speichern</button>
+          <button type="button" (click)="typeDraft = {name: ''}">Neu</button>
+        </div>
+      </form>
+      <ul>
+        <li *ngFor="let type of types">
+          {{ type.name }}
+          <span>
+            <button type="button" (click)="editType(type)">Bearbeiten</button>
+            <button type="button" (click)="deleteType(type)">Löschen</button>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
