@@ -6,18 +6,23 @@ import de.nordakademie.iaa.library.dao.PublicationTypeRepository;
 import de.nordakademie.iaa.library.model.Keyword;
 import de.nordakademie.iaa.library.model.Publication;
 import de.nordakademie.iaa.library.model.PublicationType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class PublicationServiceImpl implements PublicationService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PublicationServiceImpl.class);
 
     private final PublicationRepository publicationRepository;
     private final PublicationTypeRepository publicationTypeRepository;
@@ -77,16 +82,22 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public Publication savePublication(Publication publication) {
+        LOG.debug("Saving new publication '{}', resolving master data", publication.getTitle());
         Publication toPersist = attachMasterData(new Publication(), publication);
-        return publicationRepository.save(toPersist);
+        Publication persisted = publicationRepository.save(toPersist);
+        LOG.info("Saved publication '{}' with id {}", persisted.getTitle(), persisted.getId());
+        return persisted;
     }
 
     @Override
     public Publication updatePublication(long publicationId, Publication publication) {
+        LOG.debug("Updating publication {} with new data", publicationId);
         Publication existing = loadPublication(publicationId);
         Publication merged = attachMasterData(existing, publication);
         merged.setId(publicationId);
-        return publicationRepository.save(merged);
+        Publication persisted = publicationRepository.save(merged);
+        LOG.info("Updated publication '{}' with id {}", persisted.getTitle(), persisted.getId());
+        return persisted;
     }
 
     @Override
@@ -98,6 +109,10 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     private Publication attachMasterData(Publication target, Publication source) {
+        Long typeId = source.getType() == null ? null : source.getType().getId();
+        int keywordCount = source.getKeywords() == null ? 0 : source.getKeywords().size();
+        LOG.debug("Attaching master data for publication '{}': typeId={}, keywordCount={}",
+            source.getTitle(), typeId, keywordCount);
         target.setTitle(source.getTitle());
         target.setAuthors(source.getAuthors());
         target.setPublishedAt(source.getPublishedAt());
@@ -111,23 +126,34 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     private PublicationType resolveType(PublicationType type) {
-        if (type == null || type.getId() == null) {
+        if (type == null) {
             return null;
         }
-        return publicationTypeRepository.findById(type.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("Publication type not found"));
+        if (type.getId() == null) {
+            throw new ServiceException("Publication type id must be provided");
+        }
+        Long typeId = type.getId();
+        LOG.debug("Resolving publication type {}", typeId);
+        return publicationTypeRepository.findById(typeId)
+            .orElseThrow(() -> new ResourceNotFoundException("Publication type not found: " + typeId));
     }
 
     private Set<Keyword> resolveKeywords(Set<Keyword> keywords) {
         if (keywords == null || keywords.isEmpty()) {
             return new LinkedHashSet<>();
         }
-        return keywords.stream()
-            .map(keyword -> keyword.getId() == null
-                ? null
-                : keywordRepository.findById(keyword.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Keyword not found")))
-            .filter(java.util.Objects::nonNull)
+        boolean missingId = keywords.stream().anyMatch(keyword -> keyword.getId() == null);
+        if (missingId) {
+            throw new ServiceException("Keyword id must be provided for all keywords");
+        }
+        Set<Long> keywordIds = keywords.stream()
+            .map(Keyword::getId)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+        LOG.debug("Resolving keywords {}", keywordIds);
+        return keywordIds.stream()
+            .map(keywordId -> keywordRepository.findById(keywordId)
+                .orElseThrow(() -> new ResourceNotFoundException("Keyword not found: " + keywordId)))
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

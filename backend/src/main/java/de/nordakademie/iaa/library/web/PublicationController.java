@@ -2,6 +2,10 @@ package de.nordakademie.iaa.library.web;
 
 import de.nordakademie.iaa.library.model.Publication;
 import de.nordakademie.iaa.library.service.PublicationService;
+import de.nordakademie.iaa.library.web.dto.PublicationRequest;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +25,8 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/publications")
 public class PublicationController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PublicationController.class);
 
     private final PublicationService publicationService;
 
@@ -43,12 +49,19 @@ public class PublicationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Publication createPublication(@RequestBody Publication publication) {
+    public Publication createPublication(@Valid @RequestBody PublicationRequest request) {
+        LOG.info("Creating publication title='{}', typeId={}, keywords={}",
+            request.getTitle(), request.getTypeId(), request.keywordCount());
+        Publication publication = request.toPublication();
         return publicationService.savePublication(publication);
     }
 
     @PutMapping("/{publicationId}")
-    public Publication updatePublication(@PathVariable long publicationId, @RequestBody Publication publication) {
+    public Publication updatePublication(@PathVariable long publicationId,
+                                         @Valid @RequestBody PublicationRequest request) {
+        LOG.info("Updating publication id={} title='{}'", publicationId, request.getTitle());
+        Publication publication = request.toPublication();
+        publication.setId(publicationId);
         return publicationService.updatePublication(publicationId, publication);
     }
 

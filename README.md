@@ -1,26 +1,51 @@
-# Library Management Monorepo
+# Library Management (Learning Project)
 
-Dieses Repository bündelt Backend (Spring Boot) und Frontend (Angular) der Bibliotheksverwaltung gemäß der Prüfungsaufgabe. Die vorhandenen Übungsprojekte wurden aufgeräumt und in eine gemeinsame Struktur überführt.
+This branch (**Nivolos-gulpV1**) is a simple full-stack learning setup.
 
-## Struktur
+## Structure
+- **backend/** → Spring Boot (Java 17, Maven) on port 8080  
+- **frontend/** → Angular 17 (Node 18) on port 4200  
 
-- `backend/` – Spring Boot Grundgerüst mit H2-Datenbankkonfiguration
-- `frontend/` – Angular-Workspace als Ausgangspunkt für die UI
-- `docs/` – Aufgabenstellung und zukünftig DV-Konzept sowie weitere Dokumentation
-- `scripts/` – Platzhalter für Start- und Prüfscripte
-- `.github/workflows/` – Platzhalter für CI-Konfigurationen
+Both parts are designed for local development only — no production setup.
 
-## Backend Highlights
+---
 
-- Domänenmodell für Publikationen, Ausleihen, Ausleiher, Schlagwörter und Publikationstypen basierend auf den JPA-Mappings der früheren Room-Management-Projekte.
-- Service-Layer nach dem bekannten `RoomService`-Muster (inkl. `ServiceException`) zur Kapselung der Geschäftsregeln.
-- REST-Controller unter `/api/publications`, `/api/loans` und `/api/masters` inklusive Fehlerbehandlung.
-- Initialer Demodatensatz in `data.sql` (H2 In-Memory).
+## Quickstart
 
-## Frontend Highlights
+### Requirements
+- Java 17 (Temurin)
+- Maven
+- Node 18 (via nvm recommended)
+- Angular CLI 17
 
-- Angular-Komponentenstruktur (Container → Liste → Formular) aus dem Repetitorium übernommen und auf Publikationen, Ausleihen und Stammdaten angepasst.
-- Services für Publikationen, Ausleihen und Stammdaten mit HTTP-Anbindung an das Spring-Boot-Backend.
-- Routing und Layout zur Navigation zwischen den Kernbereichen.
+### Start Backend
+```bash
+cd backend
+./mvnw spring-boot:run
+# → http://localhost:8080
+```
 
-Weitere Funktionalitäten werden in nachfolgenden Schritten implementiert.
+### Start Frontend
+
+```bash
+cd frontend
+npm ci
+ng serve --proxy-config proxy.conf.json
+# → http://localhost:4200
+```
+
+### Test the API
+
+```bash
+curl http://localhost:8080/api/publications
+curl http://localhost:8080/api/loans
+```
+
+---
+
+## Notes
+
+* The Angular proxy forwards `/api/*` calls to the Spring Boot backend.
+* This setup is for learning and local testing.
+* Keep it simple — no CI, no Docker, no production deployment yet.
+
